@@ -306,7 +306,7 @@ function App() {
       getListings();
       setView("dashboard");
     }
-  }, [token]);
+  }, [token, getListings]);
 
   const handleRegister = async () => {
     try {
@@ -314,7 +314,7 @@ function App() {
         alert("Only @iitp.ac.in emails allowed");
         return;
       }
-      await axios.post("${process.env.REACT_APP_BACKEND_URL}/register", form);
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/register`, form);
       alert("Registered! Now log in.");
       setView("login");
       setForm({ name: "", email: "", password: "" });
@@ -325,7 +325,7 @@ function App() {
 
   const handleLogin = async () => {
     try {
-      const res = await axios.post("${process.env.REACT_APP_BACKEND_URL}/login", {
+      const res = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/login`, {
         email: form.email,
         password: form.password,
       });
@@ -371,7 +371,7 @@ function App() {
         college: "IIT Patna",
       };
 
-      await axios.post("${process.env.REACT_APP_BACKEND_URL}/post", payload, {
+      await axios.post(`${process.env.REACT_APP_BACKEND_URL}/post`, payload, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -392,7 +392,7 @@ function App() {
 
   const getListings = async () => {
     try {
-      const res = await axios.get("${process.env.REACT_APP_BACKEND_URL}/list", {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/list`, {
         params: { college: "IIT Patna" },
         headers: { Authorization: `Bearer ${token}` },
       });
