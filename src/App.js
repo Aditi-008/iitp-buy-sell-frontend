@@ -275,7 +275,7 @@ function App() {
 export default App;
 
 */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback  } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import "./App.css";
@@ -294,6 +294,19 @@ function App() {
   const [view, setView] = useState(token ? "dashboard" : "login");
   const [listings, setListings] = useState([]);
   const [userEmail, setUserEmail] = useState("");
+
+    const getListings = useCallback(async () => {
+    try {
+      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/list`, {
+        params: { college: "IIT Patna" },
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setListings(res.data);
+    } catch (err) {
+      alert(err.response?.data || "Could not fetch listings");
+    }
+  }, [token]);
+
 
   useEffect(() => {
     if (token) {
@@ -387,18 +400,6 @@ function App() {
       getListings();
     } catch (error) {
       alert(error.response?.data || "Posting failed");
-    }
-  };
-
-  const getListings = async () => {
-    try {
-      const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/list`, {
-        params: { college: "IIT Patna" },
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setListings(res.data);
-    } catch (err) {
-      alert(err.response?.data || "Could not fetch listings");
     }
   };
 
